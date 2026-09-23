@@ -1,0 +1,16 @@
+services:
+  postgres-local:
+    image: postgres:18
+    container_name: postgres-chat
+    ports:
+    - "7001:5432"
+    environment:
+      POSTGRES_DB: chat
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
+    volumes:
+      - postgres_chat:/var/lib/postgresql
+
+volumes:
+  postgres_chat:
