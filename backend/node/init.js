@@ -3,7 +3,8 @@ import { timeNow } from './utils.js'
 
 export async function dbDrop(){
     console.log(timeNow(), ' dropping db...')
-    await client.query('DROP TABLE *')
+    await client.query('DROP SCHEMA public CASCADE')
+    await client.query('CREATE SCHEMA public')
     console.log(timeNow(), 'db dropped 💀')
 }
 
@@ -23,13 +24,16 @@ export async function dbInit() {
         CREATE TABLE IF NOT EXISTS users (
             "id" BIGSERIAL PRIMARY KEY,
             "password" TEXT,
-            "name" TEXT
+            "name" TEXT NOT NULL UNIQUE,
+            "created_at" TIMESTAMP NOT NULL DEFAULT now()
         )
     `)
     await client.query(`
         CREATE TABLE IF NOT EXISTS rooms (
             "id" BIGSERIAL PRIMARY KEY,
-            "name" TEXT
+            "name" TEXT,
+            "created_at" TIMESTAMP NOT NULL DEFAULT now()
+
         )
     `)
     await client.query(`
@@ -37,7 +41,8 @@ export async function dbInit() {
             "id" BIGSERIAL PRIMARY KEY,
             "messages" TEXT,
             "authorId" BIGINT REFERENCES users(id),
-            "roomId" BIGINT REFERENCES rooms(id)
+            "roomId" BIGINT REFERENCES rooms(id),
+            "created_at" TIMESTAMP NOT NULL DEFAULT now()
         )
     `)
     console.log(timeNow(), 'db init done successfully ❤️')

@@ -1,17 +1,26 @@
-import { dbConnect, dbInit } from './init.js'
+import { dbConnect, dbInit, dbDrop } from './init.js'
+import AuthRoutes from './routes/auth.js'
 import express from 'express'
+import cors from 'cors'
 
 await dbConnect()
+await dbDrop()
 await dbInit()
 
-const app = express()
 
-app.get('/sign-up', (req, res) => {
-    res.send(req)
+const app = express()
+app.use(cors())
+app.use(express.json())
+
+app.use('/auth', AuthRoutes)
+
+app.get('/status', (req, res) => {
+    res.send('ok')
 })
 
-app.listen(9999);
-
+const port = 9999
+app.listen(port);
+console.log('listening on ', port)
 
 
 
