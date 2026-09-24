@@ -1,40 +1,19 @@
+import { dbConnect, dbInit } from './init.js'
 import express from 'express'
-import dotenv from 'dotenv'
-import { Client } from 'pg'
 
-// cfg
+await dbConnect()
+await dbInit()
 
-const config = dotenv.config({
-    pghost: process.env.PGHOST,
-    pgport: process.env.PGPORT,
-    pgdatabase: process.env.PGDATABASE,
-    pguser: process.env.PGUSER,
-    pgpassword: process.env.PGPASSWORD
-});
+const app = express()
 
-const client = new Client({
-    user: config.pghost,
-    password: config.pgpassword,
-    host: config.pghost,
-    port: config.port,
-    database: config.pgdatabase
+app.get('/sign-up', (req, res) => {
+    res.send(req)
 })
 
-// connect
-
-await client.connect()
+app.listen(9999);
 
 
 
 
 
 
-
-
-
-
-
-
-// end
-
-await client.end()
