@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 import { createUser } from '../db.js'
 
 const router = Router()
-const hash = createHash('sha256')
+
 
 router.post('/sign-up', async (req, res) => {
     const name = req?.body?.name
